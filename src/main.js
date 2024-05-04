@@ -1,15 +1,15 @@
 import '../style.css'
 import Game from './classes/Game'
-// import data, { dimensions } from './data'
+import { dimensions } from './data'
 
 window.onload = () => {
   const canvas = document.querySelector('canvas')
-  canvas.width = 1000
-  canvas.height = 600
+  canvas.width = 1200
+  canvas.height = 750
 
   const c = canvas.getContext('2d')
   c.imageSmoothingEnabled = false
-  const game = new Game({ canvas })
+  const game = new Game({ canvas, scale: 1 })
   let prev = 0
 
   const animation = (time) => {

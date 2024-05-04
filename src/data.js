@@ -1,3 +1,5 @@
+import Tile from './classes/Tile'
+
 // 376 - trees
 const trees = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -100,16 +102,22 @@ const createOneArray = (arrOne, ...arr) => {
 }
 
 const data = createOneArray(trees, buildings, foam, rocks)
+
 const data2D = []
-for (let y = 0; y < dimensions.y; y++) {
-  data2D.push(data.slice(0, dimensions.x))
+for (let y = dimensions.y - 1; y >= 0; y--) {
+  data2D.unshift(data.slice(y * dimensions.x, y * dimensions.x + dimensions.x))
 }
 
-const elements = []
+export const elements = []
 
 data2D.forEach((row, y) => {
   row.forEach((item, x) => {
-    if (item) {
-    }
+    // if (Array.isArray(item)) {
+    //   for (const value of item) {
+    //     elements.push({ position: { x, y } })
+    //   }
+    // }
+    if (item === 376)
+      elements.push(new Tile({ position: { x, y }, number: item }))
   })
 })

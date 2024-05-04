@@ -1,12 +1,25 @@
 class Sprite {
-  constructor({ canvas, src }) {
-    this.canvas = canvas
-    this.scale = 1
+  constructor({
+    src,
+    width = 0,
+    height = 0,
+    position = { x: 0, y: 0 },
+    offset = { x: 0, y: 0 },
+    parts = 1,
+  }) {
+    this.position = position
+    this.width = width
+    this.height = height
+
+    this.parts = parts
 
     this.image = new Image()
     this.image.src = src
 
-    this.offset = { x: 0, y: 0 }
+    if (!this.width) this.width = this.image.width
+    if (!this.height) this.height = this.image.height
+
+    this.offset = offset
   }
 
   update({ move }) {
@@ -14,22 +27,17 @@ class Sprite {
     this.offset.y += move.y
   }
 
-  setScale(x) {
-    if (x > 3 || x < 1) return
-    this.scale = x
-  }
-
-  draw(c) {
+  draw({ c, scale }) {
     c.drawImage(
       this.image,
       this.offset.x,
       this.offset.y,
-      this.canvas.width * this.scale,
-      this.canvas.height * this.scale,
-      0,
-      0,
-      this.image.width,
-      this.image.height
+      (this.width * scale) / this.parts,
+      this.height * scale,
+      this.position.x,
+      this.position.y,
+      this.width / this.parts,
+      this.height
     )
   }
 }

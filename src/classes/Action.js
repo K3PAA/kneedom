@@ -1,7 +1,7 @@
 class Action {
-  constructor({ background, keys }) {
+  constructor({ keys, setScale }) {
     this.keys = keys
-    this.background = background
+    this.setScale = setScale
   }
 
   select(scroll) {
@@ -9,15 +9,13 @@ class Action {
       this.keys.includes('KeyX') &&
       (this.keys.includes('KeyZ') || scroll > 0)
     ) {
-      // console.log('scale up')
-      this.background.setScale(this.background.scale + 0.025)
+      this.setScale(0.05)
     }
     if (
       this.keys.includes('KeyX') &&
       (this.keys.includes('KeyC') || scroll < 0)
     ) {
-      // console.log('scale down')
-      this.background.setScale(this.background.scale - 0.025)
+      this.setScale(-0.05)
     }
   }
 }

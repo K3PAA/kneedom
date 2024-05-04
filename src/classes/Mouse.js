@@ -5,6 +5,7 @@ class Mouse {
     this.scroll = 0
     this.position = { x: 0, y: 0 }
     this.moved = { x: 0, y: 0 }
+    this.sliding = false
 
     let scrollingTimer
 
