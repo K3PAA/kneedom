@@ -1,53 +1,53 @@
-import Sprite from './Sprite'
+import Background from './Background'
 import Input from './Input'
 import Mouse from './Mouse'
 import Action from './Action'
+import Elements from './Elements'
 
-import { elements } from '../data'
-
-import backgroundImage from '../assets/background.png'
+import { assets, tileSize } from '../data/data'
 
 class Game {
-  constructor({ canvas, scale, size = 64 }) {
+  constructor({ canvas }) {
     this.canvas = canvas
-    this.scale = scale
-    this.size = size
+    this.tileSize = tileSize
+    this.scale = 0.5
 
-    this.background = new Sprite({
-      src: backgroundImage,
-      width: canvas.width,
-      height: canvas.height,
-      scale: this.scale,
-    })
+    this.background = new Background({ src: assets.background.src, canvas })
 
     this.input = new Input()
     this.mouse = new Mouse({ canvas })
     this.action = new Action({
       keys: this.input.keys,
-      setScale: this.setScale.bind(this),
+      scale: { up: this.scaleUp.bind(this), down: this.scaleDown.bind(this) },
     })
 
-    this.elements = elements
+    this.elements = new Elements({ tileSize: this.tileSize, canvas })
   }
 
   update(time) {
-    this.action.select(this.mouse.scroll)
-    for (const tile of this.elements) {
-      tile.update({ move: this.mouse.moved, scale: this.scale })
+    this.action.select({ mouse: this.mouse })
+    this.background.update({ moved: this.mouse.moved, scale: this.scale })
+
+    for (const element of this.elements.data) {
+      element.update({
+        backgroundOffset: this.background.offset,
+        scale: this.scale,
+      })
     }
-    this.background.update({ move: this.mouse.moved })
   }
 
-  setScale(value) {
-    if (this.scale >= 2 && value > 0) return
-    if (this.scale <= 1 && value < 0) return
-    this.scale += value
+  scaleUp() {
+    if (this.background.canScale({ scale: this.scale })) this.scale += 0.005
+  }
+
+  scaleDown() {
+    if (this.scale >= 0.5) this.scale -= 0.005
   }
 
   draw(c) {
     this.background.draw({ c, scale: this.scale })
-
-    for (const tile of this.elements) tile.draw({ c })
+    for (const element of this.elements.data)
+      element.draw({ c, scale: this.scale })
   }
 }
 

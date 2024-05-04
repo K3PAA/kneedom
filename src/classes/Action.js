@@ -1,21 +1,21 @@
 class Action {
-  constructor({ keys, setScale }) {
+  constructor({ keys, scale }) {
     this.keys = keys
-    this.setScale = setScale
+    this.scale = scale
   }
 
-  select(scroll) {
+  select({ mouse }) {
     if (
       this.keys.includes('KeyX') &&
-      (this.keys.includes('KeyZ') || scroll > 0)
+      (this.keys.includes('KeyZ') || mouse.scroll > 0)
     ) {
-      this.setScale(0.05)
+      this.scale.up()
     }
     if (
       this.keys.includes('KeyX') &&
-      (this.keys.includes('KeyC') || scroll < 0)
+      (this.keys.includes('KeyC') || mouse.scroll < 0)
     ) {
-      this.setScale(-0.05)
+      this.scale.down()
     }
   }
 }

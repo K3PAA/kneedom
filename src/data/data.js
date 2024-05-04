@@ -1,4 +1,17 @@
-import Tile from './classes/Tile'
+import background from '../assets/background.png'
+import tree from '../assets/tree.png'
+import tower from '../assets/tower.png'
+
+export const dimensions = { x: 25, y: 17 }
+export const scale = 1
+export const tileSize = 64
+export const assets = {
+  background: { src: background },
+  tree: { src: tree, code: 376, parts: 7 },
+  tower: { src: tower, code: 342, parts: 6 },
+}
+
+export const elements = []
 
 // 376 - trees
 const trees = [
@@ -84,8 +97,6 @@ const rocks = [
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]
 
-export const dimensions = { x: 25, y: 17 }
-
 const createOneArray = (arrOne, ...arr) => {
   const newArr = arrOne
 
@@ -108,16 +119,17 @@ for (let y = dimensions.y - 1; y >= 0; y--) {
   data2D.unshift(data.slice(y * dimensions.x, y * dimensions.x + dimensions.x))
 }
 
-export const elements = []
-
 data2D.forEach((row, y) => {
   row.forEach((item, x) => {
-    // if (Array.isArray(item)) {
-    //   for (const value of item) {
-    //     elements.push({ position: { x, y } })
-    //   }
-    // }
-    if (item === 376)
-      elements.push(new Tile({ position: { x, y }, number: item }))
+    if (Array.isArray(item)) {
+      for (const value of item) {
+        elements.push({ dimensions: { x, y }, identifier: value })
+      }
+    }
+    if (item)
+      elements.push({
+        dimensions: { x, y },
+        identifier: item,
+      })
   })
 })

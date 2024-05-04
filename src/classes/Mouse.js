@@ -6,6 +6,7 @@ class Mouse {
     this.position = { x: 0, y: 0 }
     this.moved = { x: 0, y: 0 }
     this.sliding = false
+    this.movedTimer
 
     let scrollingTimer
 
@@ -15,14 +16,14 @@ class Mouse {
       this.sliding = true
     })
     this.canvas.addEventListener('mousemove', (e) => {
-      if (!this.sliding) return
       const { offsetX, offsetY } = e
 
-      this.position = {
-        x: this.position.x - offsetX,
-        y: this.position.y - offsetY,
+      if (this.sliding) {
+        this.moved = {
+          x: this.position.x - offsetX,
+          y: this.position.y - offsetY,
+        }
       }
-      this.moved = { x: this.position.x, y: this.position.y }
 
       this.position.x = offsetX
       this.position.y = offsetY

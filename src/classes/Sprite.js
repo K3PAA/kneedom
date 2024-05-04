@@ -1,44 +1,72 @@
 class Sprite {
   constructor({
+    dimensions,
+    tileSize,
     src,
-    width = 0,
-    height = 0,
-    position = { x: 0, y: 0 },
-    offset = { x: 0, y: 0 },
+    scale = 1,
     parts = 1,
+    imageOffset = { x: 0, y: 0 },
   }) {
-    this.position = position
-    this.width = width
-    this.height = height
-
-    this.parts = parts
+    this.dimensions = dimensions
+    this.tileSize = tileSize
+    this.scale = scale
 
     this.image = new Image()
     this.image.src = src
+    this.parts = parts
 
-    if (!this.width) this.width = this.image.width
-    if (!this.height) this.height = this.image.height
-
-    this.offset = offset
+    this.position = { x: 0, y: 0 }
+    this.backgroundOffset = { x: 0, y: 0 }
+    this.animationOffset = { x: 0, y: 0 }
+    this.imageOffset = imageOffset
   }
 
-  update({ move }) {
-    this.offset.x += move.x
-    this.offset.y += move.y
+  animate() {}
+
+  update({ backgroundOffset, scale }) {
+    this.backgroundOffset = backgroundOffset
+    this.scale = scale
+    this.position = this.calculatePosition()
+  }
+
+  calculatePosition() {
+    return {
+      x:
+        this.dimensions.x * (this.tileSize / this.scale) -
+        this.backgroundOffset.x / this.scale,
+      y:
+        this.dimensions.y * (this.tileSize / this.scale) -
+        this.backgroundOffset.y / this.scale,
+    }
+  }
+
+  box({ c, scale }) {
+    c.fillStyle = 'rgba(150,150,150, 0.4)'
+    c.fillRect(
+      this.position.x,
+      this.position.y,
+      this.tileSize / scale,
+      this.tileSize / scale
+    )
+  }
+
+  renderImage({ c, scale }) {
+    c.drawImage(
+      this.image,
+      this.animationOffset.x,
+      this.animationOffset.y,
+      this.image.width / this.parts,
+      this.image.height,
+      this.position.x - this.imageOffset.x / scale,
+      this.position.y - this.imageOffset.y / scale,
+      this.image.width / this.parts / scale,
+      this.image.height / scale
+    )
   }
 
   draw({ c, scale }) {
-    c.drawImage(
-      this.image,
-      this.offset.x,
-      this.offset.y,
-      (this.width * scale) / this.parts,
-      this.height * scale,
-      this.position.x,
-      this.position.y,
-      this.width / this.parts,
-      this.height
-    )
+    this.box({ c, scale })
+    this.renderImage({ c, scale })
   }
 }
 

@@ -1,7 +1,6 @@
 class Input {
   constructor() {
     this.keys = []
-    // z + x -> zoom in c + x -> zoom out
     this.list = ['KeyZ', 'KeyX', 'KeyC']
 
     window.addEventListener('keydown', (e) => {
