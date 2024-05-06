@@ -26,9 +26,17 @@ class Game {
 
   update(time) {
     this.action.select({ mouse: this.mouse })
+
     this.background.update({ moved: this.mouse.moved, scale: this.scale })
 
-    for (const element of this.elements.data) {
+    for (const element of this.elements.data.zero) {
+      element.update({
+        backgroundOffset: this.background.offset,
+        scale: this.scale,
+      })
+    }
+
+    for (const element of this.elements.data.one) {
       element.update({
         backgroundOffset: this.background.offset,
         scale: this.scale,
@@ -45,8 +53,12 @@ class Game {
   }
 
   draw(c) {
+    for (const element of this.elements.data.zero) {
+      element.draw({ c, scale: this.scale })
+      element.animate()
+    }
     this.background.draw({ c, scale: this.scale })
-    for (const element of this.elements.data) {
+    for (const element of this.elements.data.one) {
       element.draw({ c, scale: this.scale })
       element.animate()
     }

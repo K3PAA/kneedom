@@ -130,6 +130,110 @@ class Tower extends Sprite {
   }
 }
 
+class Sheep extends Sprite {
+  constructor({ dimensions, tileSize, scale }) {
+    super({
+      dimensions,
+      tileSize,
+      scale,
+    })
+
+    this.image.src = assets.sheep.src
+    this.parts = assets.sheep.parts
+    this.states = assets.sheep.states
+    this.actions = assets.sheep.actions
+
+    this.action = this.actions.idle
+    this.imageOffset = { x: tileSize / 2, y: tileSize / 2 }
+  }
+
+  animate() {
+    this.ft++
+    if (this.ft > this.fi) {
+      this.ft = 0
+      if (
+        this.states[this.action][this.frame] ||
+        this.states[this.action][this.frame] === 0
+      ) {
+        this.frame++
+      } else {
+        this.frame = this.states[this.action][0]
+      }
+    }
+  }
+}
+
+class Castle extends Sprite {
+  constructor({ dimensions, tileSize, scale }) {
+    super({
+      dimensions,
+      tileSize,
+      scale,
+    })
+
+    this.image.src = assets.castle.src
+    this.parts = assets.castle.parts
+    this.states = assets.castle.states
+    this.actions = assets.castle.actions
+
+    this.level = 0
+
+    this.action = this.actions.level
+    this.imageOffset = { x: 0, y: tileSize * 1 }
+  }
+  setAction(name) {
+    if (this.actions[name]) this.action = this.actions[name]
+  }
+  animate() {
+    this.ft++
+    if (this.ft > this.fi) {
+      this.ft = 0
+      if (this.states[this.action][this.frame]) {
+        if (this.action === this.actions.level) {
+          this.frame = this.states[this.action][this.level]
+        } else this.frame++
+      } else {
+        this.frame = this.states[this.action][0]
+      }
+    }
+  }
+}
+
+class House extends Sprite {
+  constructor({ dimensions, tileSize, scale }) {
+    super({
+      dimensions,
+      tileSize,
+      scale,
+    })
+
+    this.image.src = assets.house.src
+    this.parts = assets.house.parts
+    this.states = assets.house.states
+    this.actions = assets.house.actions
+
+    this.level = 0
+
+    this.action = this.actions.level
+    this.imageOffset = { x: 0, y: tileSize * 1 }
+  }
+  setAction(name) {
+    if (this.actions[name]) this.action = this.actions[name]
+  }
+  animate() {
+    this.ft++
+    if (this.ft > this.fi) {
+      this.ft = 0
+      if (this.states[this.action][this.frame]) {
+        if (this.action === this.actions.level) {
+          this.frame = this.states[this.action][this.level]
+        } else this.frame++
+      } else {
+        this.frame = this.states[this.action][0]
+      }
+    }
+  }
+}
 class Foam extends Sprite {
   constructor({ dimensions, tileSize, scale }) {
     super({
@@ -163,5 +267,51 @@ class Foam extends Sprite {
   }
 }
 
-export { Tree, Tower, Foam }
+class Rock extends Sprite {
+  constructor({ dimensions, tileSize, scale, name }) {
+    super({
+      dimensions,
+      tileSize,
+      scale,
+    })
+
+    this.image.src = assets[name].src
+    this.parts = assets[name].parts
+    this.states = assets[name].states
+    this.actions = assets[name].actions
+
+    this.action = this.actions.idle
+    this.imageOffset = { x: tileSize * 1, y: tileSize * 1 }
+  }
+
+  animate() {
+    this.ft++
+    if (this.ft > this.fi) {
+      this.ft = 0
+      if (
+        this.states[this.action][this.frame + 1] ||
+        this.states[this.action][this.frame] === 0
+      ) {
+        this.frame++
+      } else {
+        this.frame = this.states[this.action][0]
+      }
+    }
+  }
+
+  calculatePosition() {
+    return {
+      x:
+        this.dimensions.x * (this.tileSize / this.scale) -
+        this.backgroundOffset.x / this.scale +
+        this.tileSize / this.scale,
+      y:
+        this.dimensions.y * (this.tileSize / this.scale) -
+        this.backgroundOffset.y / this.scale +
+        this.tileSize / this.scale,
+    }
+  }
+}
+
+export { Tree, Tower, Foam, Castle, House, Rock, Sheep }
 export default Sprite
