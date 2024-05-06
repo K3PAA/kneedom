@@ -46,8 +46,10 @@ class Game {
 
   draw(c) {
     this.background.draw({ c, scale: this.scale })
-    for (const element of this.elements.data)
+    for (const element of this.elements.data) {
       element.draw({ c, scale: this.scale })
+      element.animate()
+    }
   }
 }
 

@@ -1,14 +1,34 @@
 import background from '../assets/background.png'
 import tree from '../assets/tree.png'
 import tower from '../assets/tower.png'
+import foamImg from '../assets/foam.png'
 
 export const dimensions = { x: 25, y: 17 }
 export const scale = 1
 export const tileSize = 64
 export const assets = {
   background: { src: background },
-  tree: { src: tree, code: 376, parts: 7 },
-  tower: { src: tower, code: 342, parts: 6 },
+  tree: {
+    src: tree,
+    code: 376,
+    parts: 7,
+    states: [[0], [1, 2, 3, 4], [5, 6]],
+    actions: { destroyed: 0, idle: 1, falling: 2 },
+  },
+  tower: {
+    src: tower,
+    code: 342,
+    parts: 6,
+    states: [[0], [1], [2, 3, 4, 5]],
+    actions: { destroyed: 0, base: 1, level: 2 },
+  },
+  foam: {
+    src: foamImg,
+    code: [274, 275, 276, 277, 278, 279, 280, 281],
+    parts: 8,
+    states: [[0, 1, 2, 3, 4, 5, 6, 7]],
+    actions: { idle: 0 },
+  },
 }
 
 export const elements = []

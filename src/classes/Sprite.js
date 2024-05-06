@@ -1,27 +1,21 @@
+import { assets } from '../data/data'
+
 class Sprite {
-  constructor({
-    dimensions,
-    tileSize,
-    src,
-    scale = 1,
-    parts = 1,
-    imageOffset = { x: 0, y: 0 },
-  }) {
+  constructor({ dimensions, tileSize, scale }) {
     this.dimensions = dimensions
     this.tileSize = tileSize
     this.scale = scale
 
     this.image = new Image()
-    this.image.src = src
-    this.parts = parts
+
+    this.fi = 20
+    this.frame = 0
+    this.ft = 0
 
     this.position = { x: 0, y: 0 }
     this.backgroundOffset = { x: 0, y: 0 }
     this.animationOffset = { x: 0, y: 0 }
-    this.imageOffset = imageOffset
   }
-
-  animate() {}
 
   update({ backgroundOffset, scale }) {
     this.backgroundOffset = backgroundOffset
@@ -53,7 +47,7 @@ class Sprite {
   renderImage({ c, scale }) {
     c.drawImage(
       this.image,
-      this.animationOffset.x,
+      this.animationOffset.x + (this.image.width / this.parts) * this.frame,
       this.animationOffset.y,
       this.image.width / this.parts,
       this.image.height,
@@ -70,4 +64,104 @@ class Sprite {
   }
 }
 
+class Tree extends Sprite {
+  constructor({ dimensions, tileSize, scale }) {
+    super({
+      dimensions,
+      tileSize,
+      scale,
+    })
+
+    this.image.src = assets.tree.src
+    this.parts = assets.tree.parts
+    this.states = assets.tree.states
+    this.actions = assets.tree.actions
+
+    this.action = this.actions.idle
+    this.imageOffset = { x: tileSize * 1, y: tileSize * 2 }
+  }
+
+  animate() {
+    this.ft++
+    if (this.ft > this.fi) {
+      this.ft = 0
+      if (this.states[this.action][this.frame]) {
+        this.frame++
+      } else {
+        this.frame = this.states[this.action][0]
+      }
+    }
+  }
+}
+
+class Tower extends Sprite {
+  constructor({ dimensions, tileSize, scale }) {
+    super({
+      dimensions,
+      tileSize,
+      scale,
+    })
+
+    this.image.src = assets.tower.src
+    this.parts = assets.tower.parts
+    this.states = assets.tower.states
+    this.actions = assets.tower.actions
+
+    this.level = 0
+
+    this.action = this.actions.level
+    this.imageOffset = { x: 0, y: tileSize * 1 }
+  }
+  setAction(name) {
+    if (this.actions[name]) this.action = this.actions[name]
+  }
+  animate() {
+    this.ft++
+    if (this.ft > this.fi) {
+      this.ft = 0
+      if (this.states[this.action][this.frame]) {
+        if (this.action === this.actions.level) {
+          this.frame = this.states[this.action][this.level]
+        } else this.frame++
+      } else {
+        this.frame = this.states[this.action][0]
+      }
+    }
+  }
+}
+
+class Foam extends Sprite {
+  constructor({ dimensions, tileSize, scale }) {
+    super({
+      dimensions,
+      tileSize,
+      scale,
+    })
+
+    this.image.src = assets.foam.src
+    this.parts = assets.foam.parts
+    this.states = assets.foam.states
+    this.actions = assets.foam.actions
+
+    this.action = this.actions.idle
+    this.imageOffset = { x: tileSize * 1, y: tileSize * 1 }
+  }
+
+  animate() {
+    this.ft++
+    if (this.ft > this.fi) {
+      this.ft = 0
+      if (
+        this.states[this.action][this.frame + 1] ||
+        this.states[this.action][this.frame] === 0
+      ) {
+        this.frame++
+      } else {
+        this.frame = this.states[this.action][0]
+      }
+    }
+  }
+}
+
+export { Tree, Tower, Foam }
 export default Sprite
